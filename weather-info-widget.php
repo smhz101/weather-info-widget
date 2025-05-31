@@ -200,6 +200,14 @@ class WIW_Weather_Widget extends WP_Widget {
     public function widget( $args, $instance ) {
         echo $args['before_widget'];
 
+        /**
+         * Action: wiw_widget_render_before
+         *
+         * @param array $args     Widget args (before_widget, before_title, etc.).
+         * @param array $instance Current widget instance settings.
+         */
+        do_action( 'wiw_widget_render_before', $args, $instance );
+
         $title          = ! empty( $instance['title'] )          ? apply_filters( 'widget_title', $instance['title'] ) : esc_html__( 'Weather', 'weather-info-widget' );
         $city           = ! empty( $instance['city'] )           ? sanitize_text_field( $instance['city'] )           : '';
         $unit           = ! empty( $instance['unit'] )           ? sanitize_text_field( $instance['unit'] )           : 'metric';
@@ -210,6 +218,15 @@ class WIW_Weather_Widget extends WP_Widget {
         $api_key_result = wiw_get_decrypted_api_key();
         if ( is_wp_error( $api_key_result ) ) {
             echo '<p>' . esc_html( $api_key_result->get_error_message() ) . '</p>';
+
+            /**
+             * Action: wiw_widget_render_after
+             *
+             * @param array $args     Widget args (before_widget, before_title, etc.).
+             * @param array $instance Current widget instance settings.
+             */
+            do_action( 'wiw_widget_render_after', $args, $instance );
+
             echo $args['after_widget'];
             return;
         }
@@ -217,6 +234,15 @@ class WIW_Weather_Widget extends WP_Widget {
 
         if ( empty( $city ) ) {
             echo '<p>' . esc_html__( 'Please set a city in widget settings.', 'weather-info-widget' ) . '</p>';
+
+            /**
+             * Action: wiw_widget_render_after
+             *
+             * @param array $args     Widget args (before_widget, before_title, etc.).
+             * @param array $instance Current widget instance settings.
+             */
+            do_action( 'wiw_widget_render_after', $args, $instance );
+
             echo $args['after_widget'];
             return;
         }
@@ -245,6 +271,17 @@ class WIW_Weather_Widget extends WP_Widget {
                     $widget_class .= ' weather-info-widget-horizontal';
                 }
             }
+
+            /**
+             * Filter: wiw_widget_container_class
+             * Allows modification of the final container CSS classes.
+             *
+             * @param string $widget_class CSS class string before output.
+             * @param array  $instance     Current widget instance settings.
+             * @param array  $args         Widget arguments (before_widget, etc.).
+             */
+            $widget_class = apply_filters( 'wiw_widget_container_class', $widget_class, $instance, $args );
+            
             ?>
             <div class="<?php echo esc_attr( $widget_class ); ?>">
                 <?php if ( 'advanced' === $display_style ) : ?>
@@ -313,6 +350,14 @@ class WIW_Weather_Widget extends WP_Widget {
             </div>
             <?php
         }
+
+        /**
+         * Action: wiw_widget_render_after
+         *
+         * @param array $args     Widget args (before_widget, before_title, etc.).
+         * @param array $instance Current widget instance settings.
+         */
+        do_action( 'wiw_widget_render_after', $args, $instance );
 
         echo $args['after_widget'];
     }
@@ -469,7 +514,32 @@ function wiw_fetch_weather_data( $city, $api_key, $unit = 'metric' ) {
         . '&appid=' . rawurlencode( $api_key )
         . '&units=' . rawurlencode( $unit );
 
-    $response = wp_remote_get( $api_url, array( 'timeout' => 10 ) );
+    // DEFAULT HTTP ARGS
+    $http_args = array(
+        'timeout' => 10,
+    );
+
+    /**
+     * Filter: wiw_fetch_weather_data_args
+     * Allows URL or HTTP args adjustment before the API call.
+     *
+     * @param array {
+     *     @type string $url      Full API URL.
+     *     @type array  $args     wp_remote_get() arguments.
+     * }
+     * @param string $city Current city.
+     * @param string $unit Current unit (metric|imperial).
+     */
+    $filtered = apply_filters( 'wiw_fetch_weather_data_args', array(
+        'url'  => $api_url,
+        'args' => $http_args,
+    ), $city, $unit );
+
+    // Use possibly modified URL/args
+    $api_url  = $filtered['url'];
+    $http_args = $filtered['args'];
+
+    $response = wp_remote_get( $api_url, $http_args );
     if ( is_wp_error( $response ) ) {
         return new WP_Error(
             'wiw_network_error',
@@ -493,7 +563,29 @@ function wiw_fetch_weather_data( $city, $api_key, $unit = 'metric' ) {
         return new WP_Error( 'wiw_parse_error', __( 'Failed to parse weather data from API.', 'weather-info-widget' ) );
     }
 
-    set_transient( $transient_key, $data, HOUR_IN_SECONDS );
+    /**
+     * Filter: wiw_weather_data
+     * Allows modification of the decoded weather data before caching/return.
+     *
+     * @param array  $data Raw decoded API response.
+     * @param string $city Current city.
+     * @param string $unit Current unit.
+     */
+    $data = apply_filters( 'wiw_weather_data', $data, $city, $unit );
+
+    $default_ttl = HOUR_IN_SECONDS;
+
+    /**
+     * Filter: wiw_transient_expiration
+     * Override default cache expiration (seconds).
+     *
+     * @param int    $ttl   Default TTL in seconds.
+     * @param string $city  Current city.
+     * @param string $unit  Current unit.
+     */
+    $ttl = apply_filters( 'wiw_transient_expiration', $default_ttl, $city, $unit );
+    set_transient( $transient_key, $data, $ttl );
+
     return $data;
 }
 
