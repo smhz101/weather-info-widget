@@ -1,0 +1,283 @@
+/* Basic styling for the standard widget */
+.weather-info-widget-standard {
+	padding: 15px;
+	border: 1px solid #eee;
+	border-radius: 8px;
+	background-color: #f9f9f9;
+	font-family: sans-serif;
+	color: #333;
+	text-align: center;
+}
+
+.weather-info-widget-standard p {
+	margin-bottom: 5px;
+	line-height: 1.4;
+}
+
+.weather-info-widget-standard strong {
+	font-size: 1.1em;
+	color: #0073aa;
+}
+
+.weather-info-widget-standard .weather-icon-small {
+	width: 50px;
+	height: 50px;
+	vertical-align: middle;
+	margin-right: 5px;
+}
+
+/* Advanced styling for the "MacBook weather card" look */
+.weather-info-widget-advanced {
+	background: linear-gradient(135deg, #4a90e2, #63b8ff); /* Blue gradient */
+	color: #fff;
+	padding: 20px;
+	border-radius: 15px;
+	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+	font-family: "SF Pro Display", "Helvetica Neue", "Helvetica", "Arial",
+		sans-serif; /* Apple-like font stack */
+	text-align: center;
+	max-width: 300px; /* Default max-width for vertical */
+	margin: 0 auto; /* Center the card */
+	display: flex;
+	flex-direction: column; /* Default to vertical */
+	gap: 15px;
+}
+
+.weather-info-widget-advanced .weather-card-content {
+	display: flex;
+	flex-direction: column; /* Default to vertical content */
+	gap: 15px;
+	width: 100%; /* Ensure content takes full width */
+}
+
+.weather-info-widget-advanced .weather-card-header {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 5px;
+}
+
+.weather-info-widget-advanced .weather-city {
+	font-size: 1.8em;
+	font-weight: 600;
+	margin: 0;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.weather-info-widget-advanced .weather-icon {
+	width: 80px;
+	height: 80px;
+	filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.weather-info-widget-advanced .weather-description {
+	font-size: 1.1em;
+	opacity: 0.9;
+	margin: 0;
+}
+
+.weather-info-widget-advanced .weather-card-body {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.weather-info-widget-advanced .weather-temp {
+	font-size: 3.5em;
+	font-weight: 700;
+	margin: 0;
+	line-height: 1;
+	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.weather-info-widget-advanced .weather-feels-like {
+	font-size: 1em;
+	opacity: 0.8;
+	margin: 0;
+}
+
+.weather-info-widget-advanced .weather-details-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 10px;
+	margin-top: 15px;
+	padding-top: 15px;
+	border-top: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.weather-info-widget-advanced .weather-details-grid p {
+	margin: 0;
+	font-size: 0.9em;
+	text-align: left;
+	display: flex;
+	flex-direction: column;
+}
+
+.weather-info-widget-advanced .weather-details-grid p span {
+	font-weight: 500;
+	opacity: 0.9;
+	margin-bottom: 2px;
+}
+
+/* Horizontal layout for advanced card */
+.weather-info-widget-advanced.weather-info-widget-horizontal {
+	max-width: 600px; /* Adjust max-width for horizontal */
+	flex-direction: row; /* Main container becomes row */
+	align-items: center;
+	justify-content: space-around;
+	padding: 20px 30px;
+}
+
+.weather-info-widget-advanced.weather-info-widget-horizontal
+	.weather-card-content {
+	flex-direction: row; /* Content inside becomes row */
+	align-items: center;
+	justify-content: space-between;
+	gap: 20px;
+}
+
+.weather-info-widget-advanced.weather-info-widget-horizontal
+	.weather-card-header {
+	flex-direction: column; /* Header elements in a column */
+	align-items: center;
+	gap: 2px;
+	text-align: left;
+	flex-shrink: 0; /* Prevent shrinking */
+	min-width: 170px;
+}
+
+.weather-info-widget-advanced.weather-info-widget-horizontal .weather-city {
+	font-size: 1.5em; /* Slightly smaller for horizontal */
+}
+
+.weather-info-widget-advanced.weather-info-widget-horizontal
+	.weather-description {
+	font-size: 0.9em;
+	white-space: nowrap; /* Keep description on one line if possible */
+}
+
+.weather-info-widget-advanced.weather-info-widget-horizontal
+	.weather-card-body {
+	text-align: left;
+	flex-grow: 1; /* Allow body to take available space */
+	gap: 5px;
+}
+
+.weather-info-widget-advanced.weather-info-widget-horizontal .weather-temp {
+	font-size: 2.8em; /* Smaller temperature for horizontal */
+	text-align: right;
+}
+
+.weather-info-widget-advanced.weather-info-widget-horizontal
+	.weather-feels-like {
+	text-align: right;
+}
+
+.weather-info-widget-advanced.weather-info-widget-horizontal
+	.weather-details-grid {
+	grid-template-columns: 1fr; /* Stack details vertically in horizontal mode */
+	border-top: none; /* Remove border */
+	padding-top: 0;
+	margin-top: 0;
+}
+
+.weather-info-widget-advanced.weather-info-widget-horizontal
+	.weather-details-grid
+	p {
+	flex-direction: row; /* Details labels and values in a row */
+	justify-content: space-between;
+	align-items: center;
+}
+
+.weather-info-widget-advanced.weather-info-widget-horizontal
+	.weather-details-grid
+	p
+	span {
+	margin-bottom: 0;
+	margin-right: 5px;
+}
+
+/* Search form styling */
+.weather-info-widget-search-form {
+	display: flex;
+	gap: 5px;
+	margin-bottom: 15px;
+}
+
+.weather-info-widget-search-form .weather-city-search-input {
+	flex-grow: 1;
+	padding: 8px 10px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	font-size: 0.9em;
+}
+
+.weather-info-widget-search-form .weather-city-search-button {
+	padding: 8px 12px;
+	background-color: #0073aa;
+	color: #fff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 0.9em;
+}
+
+.weather-info-widget-search-form .weather-city-search-button:hover {
+	background-color: #005177;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+	.weather-info-widget-advanced.weather-info-widget-horizontal {
+		flex-direction: column; /* Stack vertically on tablets */
+		max-width: 100%;
+		padding: 15px;
+	}
+	.weather-info-widget-advanced.weather-info-widget-horizontal
+		.weather-card-content {
+		flex-direction: column;
+		text-align: center;
+	}
+	.weather-info-widget-advanced.weather-info-widget-horizontal
+		.weather-card-header {
+		flex-direction: column;
+		text-align: center;
+	}
+	.weather-info-widget-advanced.weather-info-widget-horizontal
+		.weather-card-body {
+		text-align: center;
+	}
+	.weather-info-widget-advanced.weather-info-widget-horizontal .weather-temp,
+	.weather-info-widget-advanced.weather-info-widget-horizontal
+		.weather-feels-like {
+		text-align: center;
+	}
+	.weather-info-widget-advanced.weather-info-widget-horizontal
+		.weather-details-grid {
+		grid-template-columns: 1fr;
+		text-align: left;
+	}
+	.weather-info-widget-advanced.weather-info-widget-horizontal
+		.weather-details-grid
+		p {
+		justify-content: space-between;
+	}
+}
+
+@media (max-width: 480px) {
+	.weather-info-widget-advanced {
+		padding: 15px;
+	}
+	.weather-info-widget-advanced .weather-city {
+		font-size: 1.5em;
+	}
+	.weather-info-widget-advanced .weather-temp {
+		font-size: 3em;
+	}
+	.weather-info-widget-search-form {
+		flex-direction: column;
+	}
+	.weather-info-widget-search-form .weather-city-search-button {
+		width: 100%;
+	}
+}
